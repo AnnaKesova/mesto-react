@@ -13,8 +13,8 @@ function App() {
   const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = React.useState(false);
   const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] =
     React.useState(false);
-    const [selectedCard, setSelectedCard] = React.useState(null);
-// открытие попапов
+  const [selectedCard, setSelectedCard] = React.useState(null);
+  // открытие попапов
   function handleEditProfileClick() {
     setIsEditProfilePopupOpen(true);
   }
@@ -30,12 +30,12 @@ function App() {
   function handleSelectedCard(card) {
     setSelectedCard(card);
   }
-// закрытие попапов
+  // закрытие попапов
   function closeAllPopups() {
     setIsEditProfilePopupOpen(false);
     setIsAddPlacePopupOpen(false);
     setIsEditAvatarPopupOpen(false);
-    setSelectedCard(null)
+    setSelectedCard(null);
   }
 
   return (
@@ -46,7 +46,7 @@ function App() {
           onEditAvatar={handleEditAvatarClick}
           onEditProfile={handleEditProfileClick}
           onAddPlace={handleAddPlaceClick}
-          onCardClick = {handleSelectedCard}
+          onCardClick={handleSelectedCard}
         />
         <Footer />
       </div>
@@ -55,6 +55,7 @@ function App() {
         name="avatar"
         isOpen={isEditAvatarPopupOpen}
         onClose={closeAllPopups}
+        buttonText="Сохранить"
       >
         <input
           className="form__item form__item_type_avatar"
@@ -75,6 +76,7 @@ function App() {
         name="form"
         isOpen={isEditProfilePopupOpen}
         onClose={closeAllPopups}
+        buttonText="Сохранить"
       >
         <input
           className="form__item form__item_type_username"
@@ -136,6 +138,7 @@ function App() {
         name="cards"
         isOpen={isAddPlacePopupOpen}
         onClose={closeAllPopups}
+        buttonText="Создать"
       >
         <input
           className="form__item form__item_type_city"
@@ -147,7 +150,6 @@ function App() {
           minLength="2"
           maxLength="30"
           id="cardname"
-          
         />
         <span
           className="form__item-error form__item-error_active"
@@ -167,8 +169,7 @@ function App() {
           id="link-error"
         ></span>
       </PopupWithForm>
-      <ImagePopup card={selectedCard} onClose={closeAllPopups}/>
-      
+      <ImagePopup card={selectedCard} onClose={closeAllPopups} />
     </div>
   );
 }

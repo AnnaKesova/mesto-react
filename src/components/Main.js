@@ -7,7 +7,6 @@ function Main({ onEditProfile, onEditAvatar, onAddPlace, onCardClick }) {
   const [userDescription, setUserDescription] = React.useState("");
   const [userAvatar, setUserAvatar] = React.useState("");
   const [cards, setCards] = React.useState([]);
-  //console.log(cards);
 
   // промис для получения данных картинки и пользователя
   React.useEffect(() => {
@@ -17,7 +16,6 @@ function Main({ onEditProfile, onEditAvatar, onAddPlace, onCardClick }) {
         setUserDescription(userInfoApi.about);
         setUserAvatar(userInfoApi.avatar);
 
-        //console.log(api.getInitialCards());
         setCards(initialcards);
       })
       .catch((err) => {
@@ -59,7 +57,7 @@ function Main({ onEditProfile, onEditAvatar, onAddPlace, onCardClick }) {
       </section>
       <section className="content__cards cards">
         <ul className="cards__elements">
-          {cards.map((card, _id) => (
+          {cards.map((card) => (
             <Card key={card._id} card={card} onCardClick={onCardClick} />
           ))}
         </ul>
