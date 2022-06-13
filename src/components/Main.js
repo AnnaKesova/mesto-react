@@ -1,21 +1,29 @@
 import React from "react";
 import { api } from "../utils/Api.js";
+import Card from "../components/Card.js";
 
-function Main({ onEditProfile, onEditAvatar, onAddPlace }) {
+function Main({ onEditProfile, onEditAvatar, onAddPlace, onCardClick }) {
   const [userName, setUserName] = React.useState("");
   const [userDescription, setUserDescription] = React.useState("");
   const [userAvatar, setUserAvatar] = React.useState("");
+  const [cards, setCards] = React.useState([]);
+  //console.log(cards);
 
   // промис для получения данных картинки и пользователя
-  Promise.all([/*initialcards,*/ api.getUserInfoFromApi()])
-    .then(([/*cardsInit,*/ userInfoApi]) => {
-      setUserName(userInfoApi.name);
-      setUserDescription(userInfoApi.about);
-      setUserAvatar(userInfoApi.avatar);
-    })
-    .catch((err) => {
-      console.log(err);
-    });
+  React.useEffect(() => {
+    Promise.all([api.getInitialCards(), api.getUserInfoFromApi()])
+      .then(([initialcards, userInfoApi]) => {
+        setUserName(userInfoApi.name);
+        setUserDescription(userInfoApi.about);
+        setUserAvatar(userInfoApi.avatar);
+
+        //console.log(api.getInitialCards());
+        setCards(initialcards);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
 
   return (
     <main className="page__content content">
@@ -50,7 +58,11 @@ function Main({ onEditProfile, onEditAvatar, onAddPlace }) {
         ></button>
       </section>
       <section className="content__cards cards">
-        <ul className="cards__elements"></ul>
+        <ul className="cards__elements">
+          {cards.map((card, _id) => (
+            <Card key={card._id} card={card} onCardClick={onCardClick} />
+          ))}
+        </ul>
       </section>
     </main>
   );

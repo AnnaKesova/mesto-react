@@ -4,15 +4,17 @@ import Header from "./Header";
 import Main from "./Main.js";
 import Footer from "./Footer.js";
 import PopupWithForm from "./PopupWithForm.js";
-//import {api} from "../utils/Api.js"
+import ImagePopup from "./ImagePopup.js";
 
 function App() {
+  // состояние для попапов
   const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] =
     React.useState(false);
   const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = React.useState(false);
   const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] =
     React.useState(false);
-
+    const [selectedCard, setSelectedCard] = React.useState(null);
+// открытие попапов
   function handleEditProfileClick() {
     setIsEditProfilePopupOpen(true);
   }
@@ -25,20 +27,26 @@ function App() {
     setIsAddPlacePopupOpen(true);
   }
 
+  function handleSelectedCard(card) {
+    setSelectedCard(card);
+  }
+// закрытие попапов
   function closeAllPopups() {
     setIsEditProfilePopupOpen(false);
     setIsAddPlacePopupOpen(false);
     setIsEditAvatarPopupOpen(false);
+    setSelectedCard(null)
   }
 
   return (
-    <body className="root">
+    <div>
       <div className="page">
         <Header />
         <Main
           onEditAvatar={handleEditAvatarClick}
           onEditProfile={handleEditProfileClick}
           onAddPlace={handleAddPlaceClick}
+          onCardClick = {handleSelectedCard}
         />
         <Footer />
       </div>
@@ -53,7 +61,7 @@ function App() {
           type="url"
           name="avatar"
           placeholder="Ссылка на аватар"
-          value=""
+          defaultValue=""
           required
           id="avatar"
         />
@@ -73,9 +81,9 @@ function App() {
           type="text"
           name="username"
           placeholder="Имя"
-          value=""
-          minlength="2"
-          maxlength="40"
+          defaultValue=""
+          minLength="2"
+          maxLength="40"
           required
           id="username"
         />
@@ -88,9 +96,9 @@ function App() {
           type="text"
           name="job"
           placeholder="О себе"
-          value=""
-          minlength="2"
-          maxlength="200"
+          defaultValue=""
+          minLength="2"
+          maxLength="200"
           required
           id="job"
         />
@@ -134,11 +142,12 @@ function App() {
           type="text"
           name="name"
           placeholder="Название"
-          value=""
+          defaultValue=""
           required
-          minlength="2"
-          maxlength="30"
+          minLength="2"
+          maxLength="30"
           id="cardname"
+          
         />
         <span
           className="form__item-error form__item-error_active"
@@ -149,7 +158,7 @@ function App() {
           type="url"
           name="link"
           placeholder="Ссылка на картинку"
-          value=""
+          defaultValue=""
           required
           id="link"
         />
@@ -158,42 +167,9 @@ function App() {
           id="link-error"
         ></span>
       </PopupWithForm>
-      <div id="popup-image" className="popup popup-image">
-        <div className="popup__content">
-          <img className="popup__photo" src="#" alt="" />
-          <p className="popup__text"></p>
-          <button
-            type="button"
-            className="button popup__close popup-image__close"
-            title="Закрытие"
-            aria-label="Закрыть"
-          ></button>
-        </div>
-      </div>
-      <template id="template-photo" className="card-template">
-        <li className="photo">
-          <img src="#" className="photo__image" alt="" />
-          <div className="photo__title">
-            <h2 className="photo__text"></h2>
-            <div className="photo__group-like">
-              <button
-                type="button"
-                className="button photo__vector"
-                title="Нравится"
-                aria-label="Любимые картинки"
-              ></button>
-              <span className="photo__numlike">0</span>
-            </div>
-          </div>
-          <button
-            type="button"
-            className="button photo__bin"
-            title="Удаление"
-            aria-label="Урна"
-          ></button>
-        </li>
-      </template>
-    </body>
+      <ImagePopup card={selectedCard} onClose={closeAllPopups}/>
+      
+    </div>
   );
 }
 
