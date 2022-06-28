@@ -1,4 +1,4 @@
-class Api { 
+class Api {
   constructor(config) {
     this._baseUrl = config.baseUrl;
     this._headers = config.headers;
@@ -24,20 +24,20 @@ class Api {
   }
 
   //добавить нового пользователя
-  addUserInfo(data) {
+  addUserInfo(name, about) {
     return fetch(`${this._baseUrl}/users/me`, {
       method: "PATCH",
       headers: this._headers,
-      body: JSON.stringify(data),
+      body: JSON.stringify({ name: name, about: about }),
     }).then(this._handlePromiseErr);
   }
 
   //Добавить новую картинку.
-  addNewCard(data) {
+  addNewCard(name, link) {
     return fetch(`${this._baseUrl}/cards`, {
       method: "POST",
       headers: this._headers,
-      body: JSON.stringify(data),
+      body: JSON.stringify({ name: name, link: link }),
     }).then(this._handlePromiseErr);
   }
 
@@ -46,7 +46,7 @@ class Api {
     return fetch(`${this._baseUrl}/users/me/avatar`, {
       method: "PATCH",
       headers: this._headers,
-      body: JSON.stringify(avatar),
+      body: JSON.stringify({ avatar: avatar }),
     }).then(this._handlePromiseErr);
   }
 
@@ -59,7 +59,7 @@ class Api {
   }
 
   //Добавить like картинке.
-  putLikeCard(id) {
+  changeLikeCardStatus(id) {
     return fetch(`${this._baseUrl}/cards/${id}/likes`, {
       method: "PUT",
       headers: this._headers,

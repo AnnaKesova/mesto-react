@@ -1,9 +1,33 @@
 import React from "react";
+import { CurrentUserContext } from "../contexts/CurrentUserContext.js";
 
-function Card({ card, onCardClick }) {
+function Card({ card, onCardClick, onCardLike, onDeleteCard}) {
+  const currentUser = React.useContext(CurrentUserContext);
   const handleClick = () => {
     onCardClick(card);
   };
+
+  const handleCardLike = () => {
+    onCardLike(card)
+  }
+
+  const handleCardDelete = () => {
+    onDeleteCard(card)
+  }
+
+  // Определяем, являемся ли мы владельцем текущей карточки
+const isOwn = card.owner._id === currentUser._id;
+
+// Создаём переменную, которую после зададим в `className` для кнопки удаления
+const cardDeleteButtonClassName = (
+  `photo__bin ${isOwn ? 'photo__bin_active' : 'photo__bin'}`
+);
+
+// Определяем, есть ли у карточки лайк, поставленный текущим пользователем
+const isLiked = card.likes.some(i => i._id === currentUser._id);
+
+// Создаём переменную, которую после зададим в `className` для кнопки лайка
+const cardLikeButtonClassName = (`photo__vector ${isLiked ? `photo__vector_active` : `photo__vector`}`);
 
   return (
     <li className="photo">
@@ -18,18 +42,20 @@ function Card({ card, onCardClick }) {
         <div className="photo__group-like">
           <button
             type="button"
-            className="button photo__vector"
+            className={cardLikeButtonClassName}
             title="Нравится"
             aria-label="Любимые картинки"
+            onClick={handleCardLike}
           ></button>
           <span className="photo__numlike">0</span>
         </div>
       </div>
       <button
         type="button"
-        className="button photo__bin"
+        className= {cardDeleteButtonClassName}
         title="Удаление"
         aria-label="Урна"
+        onClick={handleCardDelete}
       ></button>
     </li>
   );
