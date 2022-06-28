@@ -1,12 +1,12 @@
-import React from "react";
+import React, {useState, useEffect, useContext} from "react";
 import PopupWithForm from "./PopupWithForm.js";
 import { CurrentUserContext } from "../contexts/CurrentUserContext.js";
 
 function EditProfilePopup({ isOpen, onClose, onUpdateUser, loading }) {
   // Подписка на контекст
-  const currentUser = React.useContext(CurrentUserContext);
-  const [name, setName] = React.useState("");
-  const [description, setDescription] = React.useState("");
+  const currentUser = useContext(CurrentUserContext);
+  const [name, setName] = useState("");
+  const [description, setDescription] = useState("");
 
   function handleChangeName(e) {
     setName(e.target.value);
@@ -18,10 +18,10 @@ function EditProfilePopup({ isOpen, onClose, onUpdateUser, loading }) {
 
   // После загрузки текущего пользователя из API
   // его данные будут использованы в управляемых компонентах.
-  React.useEffect(() => {
-    setName(currentUser.name);
-    setDescription(currentUser.about);
-  }, [currentUser]);
+  useEffect(() => {
+    setName("");
+    setDescription("");
+  }, [currentUser, isOpen]);
 
   function handleSubmit(e) {
     e.preventDefault();

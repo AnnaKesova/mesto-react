@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import "../index.css";
 import Header from "./Header";
 import Main from "./Main.js";
@@ -9,25 +9,24 @@ import { api } from "../utils/Api.js";
 import EditProfilePopup from "./EditProfilePopup.js";
 import EditAvatarPopup from "./EditAvatarPopup.js";
 import AddPlacePopup from "./AddPlacePopup";
+import PopupWithSubmit from "./PopupWithSubmit";
 
 function App() {
   // получение API
-  const [currentUser, setCurrentUser] = React.useState({
+  const [currentUser, setCurrentUser] = useState({
     name: "",
     about: "",
   });
-  const [cards, setCards] = React.useState([]);
+  const [cards, setCards] = useState([]);
 
   // состояние для попапов
-  const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] =
-    React.useState(false);
-  const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = React.useState(false);
-  const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] =
-    React.useState(false);
-  const [selectedCard, setSelectedCard] = React.useState(null);
-  const [renderLoading, setRenderLoading] = React.useState(false);
+  const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = useState(false);
+  const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = useState(false);
+  const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = useState(false);
+  const [selectedCard, setSelectedCard] = useState(null);
+  const [renderLoading, setRenderLoading] = useState(false);
 
-  React.useEffect(() => {
+  useEffect(() => {
     api
       .getUserInfoFromApi()
       .then((res) => {
@@ -38,7 +37,7 @@ function App() {
       });
   }, []);
 
-  React.useEffect(() => {
+  useEffect(() => {
     api
       .getInitialCards()
       .then((res) => {
@@ -53,17 +52,30 @@ function App() {
     // Снова проверяем, есть ли уже лайк на этой карточке
     const isLiked = card.likes.some((i) => i._id === currentUser._id);
 
-    // Отправляем запрос в API и получаем обновлённые данные карточки
-    api
-      .changeLikeCardStatus(card._id, !isLiked)
-      .then((newCard) => {
-        setCards((state) =>
-          state.map((c) => (c._id === card._id ? newCard : c))
-        );
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    if (isLiked) {
+      api
+        .deleteLike(card._id, !isLiked)
+        .then((newCard) => {
+          setCards((state) =>
+            state.map((c) => (c._id === card._id ? newCard : c))
+          );
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    } else {
+      // Отправляем запрос в API и получаем обновлённые данные карточки
+      api
+        .changeLikeCardStatus(card._id, !isLiked)
+        .then((newCard) => {
+          setCards((state) =>
+            state.map((c) => (c._id === card._id ? newCard : c))
+          );
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
   }
 
   function handleCardDelete(card) {
@@ -167,29 +179,7 @@ function App() {
         onUpdateUser={handleUpdateUser}
         loading={renderLoading}
       />
-      <div id="popup-confirm" className="popup confirm-popup">
-        <div className="popup__body">
-          <form className="form form-confirm">
-            <h2 className="popup__heading confirm-popup__heading">
-              Вы уверены?
-            </h2>
-            <button
-              type="submit"
-              className="button popup__save confirm-popup__yes"
-              title="Согласие"
-              aria-label="Согласиться"
-            >
-              Да
-            </button>
-          </form>
-          <button
-            type="button"
-            className="button popup__close confirm-popup__close"
-            title="Закрыть"
-            aria-label="Закрытие"
-          ></button>
-        </div>
-      </div>
+      <PopupWithSubmit />
       <AddPlacePopup
         isOpen={isAddPlacePopupOpen}
         onClose={closeAllPopups}

@@ -33,7 +33,7 @@ function Main({
             className="button profile__edit-button popup-open"
             title="Редактировать профиль"
             onClick={onEditProfile}
-          ></button>
+          />
           <p id="paragraph" className="profile__job">
             {currentUser.about}
           </p>
@@ -43,7 +43,7 @@ function Main({
           className="button profile__add-button add-open"
           title="Добавить фото"
           onClick={onAddPlace}
-        ></button>
+        />
       </section>
       <section className="content__cards cards">
         <ul className="cards__elements">

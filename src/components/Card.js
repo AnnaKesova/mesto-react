@@ -1,8 +1,8 @@
-import React from "react";
+import React, {useContext} from "react";
 import { CurrentUserContext } from "../contexts/CurrentUserContext.js";
 
 function Card({ card, onCardClick, onCardLike, onDeleteCard }) {
-  const currentUser = React.useContext(CurrentUserContext);
+  const currentUser = useContext(CurrentUserContext);
   const handleClick = () => {
     onCardClick(card);
   };
@@ -49,7 +49,7 @@ function Card({ card, onCardClick, onCardLike, onDeleteCard }) {
             aria-label="Любимые картинки"
             onClick={handleCardLike}
           ></button>
-          <span className="photo__numlike">0</span>
+          <span className="photo__numlike">{card.likes.length}</span>
         </div>
       </div>
       <button
