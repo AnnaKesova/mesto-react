@@ -2,7 +2,7 @@ import React from "react";
 import PopupWithForm from "./PopupWithForm.js";
 import { CurrentUserContext } from "../contexts/CurrentUserContext.js";
 
-function AddPlacePopup({ isOpen, onClose, onAddPlace }) {
+function AddPlacePopup({ isOpen, onClose, onAddPlace, loading }) {
   const currentUser = React.useContext(CurrentUserContext);
   const [name, setName] = React.useState("");
   const [link, setLink] = React.useState("");
@@ -38,7 +38,7 @@ function AddPlacePopup({ isOpen, onClose, onAddPlace }) {
       name="cards"
       isOpen={isOpen}
       onClose={onClose}
-      buttonText="Создать"
+      buttonText={loading ? "Загрузка" : "Создать"}
       onSubmit={handleSubmit}
     >
       <input

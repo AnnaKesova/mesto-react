@@ -1,33 +1,35 @@
 import React from "react";
 import { CurrentUserContext } from "../contexts/CurrentUserContext.js";
 
-function Card({ card, onCardClick, onCardLike, onDeleteCard}) {
+function Card({ card, onCardClick, onCardLike, onDeleteCard }) {
   const currentUser = React.useContext(CurrentUserContext);
   const handleClick = () => {
     onCardClick(card);
   };
 
   const handleCardLike = () => {
-    onCardLike(card)
-  }
+    onCardLike(card);
+  };
 
   const handleCardDelete = () => {
-    onDeleteCard(card)
-  }
+    onDeleteCard(card);
+  };
 
   // Определяем, являемся ли мы владельцем текущей карточки
-const isOwn = card.owner._id === currentUser._id;
+  const isOwn = card.owner._id === currentUser._id;
 
-// Создаём переменную, которую после зададим в `className` для кнопки удаления
-const cardDeleteButtonClassName = (
-  `photo__bin ${isOwn ? 'photo__bin_active' : 'photo__bin'}`
-);
+  // Создаём переменную, которую после зададим в `className` для кнопки удаления
+  const cardDeleteButtonClassName = `photo__bin ${
+    isOwn ? "photo__bin_active" : "photo__bin"
+  }`;
 
-// Определяем, есть ли у карточки лайк, поставленный текущим пользователем
-const isLiked = card.likes.some(i => i._id === currentUser._id);
+  // Определяем, есть ли у карточки лайк, поставленный текущим пользователем
+  const isLiked = card.likes.some((i) => i._id === currentUser._id);
 
-// Создаём переменную, которую после зададим в `className` для кнопки лайка
-const cardLikeButtonClassName = (`photo__vector ${isLiked ? `photo__vector_active` : `photo__vector`}`);
+  // Создаём переменную, которую после зададим в `className` для кнопки лайка
+  const cardLikeButtonClassName = `photo__vector ${
+    isLiked ? `photo__vector_active` : `photo__vector`
+  }`;
 
   return (
     <li className="photo">
@@ -52,7 +54,7 @@ const cardLikeButtonClassName = (`photo__vector ${isLiked ? `photo__vector_activ
       </div>
       <button
         type="button"
-        className= {cardDeleteButtonClassName}
+        className={cardDeleteButtonClassName}
         title="Удаление"
         aria-label="Урна"
         onClick={handleCardDelete}

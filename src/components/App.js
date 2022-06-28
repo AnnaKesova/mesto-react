@@ -3,7 +3,6 @@ import "../index.css";
 import Header from "./Header";
 import Main from "./Main.js";
 import Footer from "./Footer.js";
-import PopupWithForm from "./PopupWithForm.js";
 import ImagePopup from "./ImagePopup.js";
 import { CurrentUserContext } from "../contexts/CurrentUserContext.js";
 import { api } from "../utils/Api.js";
@@ -26,6 +25,7 @@ function App() {
   const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] =
     React.useState(false);
   const [selectedCard, setSelectedCard] = React.useState(null);
+  const [renderLoading, setRenderLoading] = React.useState(false);
 
   React.useEffect(() => {
     api
@@ -67,7 +67,6 @@ function App() {
   }
 
   function handleCardDelete(card) {
-    // const isOwn = card.owner._id === currentUser._id;
     api
       .deleteNewCard(card._id)
       .then(() => {
@@ -104,26 +103,31 @@ function App() {
   }
 
   function handleUpdateUser({ name, about }) {
+    setRenderLoading(true);
     api
       .addUserInfo(name, about)
       .then((res) => {
         setCurrentUser(res);
         closeAllPopups();
       })
-      .catch((err) => console.log(err));
+      .catch((err) => console.log(err))
+      .finally(() => setRenderLoading(false));
   }
 
   function handleUpdateAvatar({ avatar }) {
+    setRenderLoading(true);
     api
       .addUserAvatar(avatar)
       .then((res) => {
         setCurrentUser(res);
         closeAllPopups();
       })
-      .catch((err) => console.log(err));
+      .catch((err) => console.log(err))
+      .finally(() => setRenderLoading(false));
   }
 
   function handleAddPlaceSubmit({ name, link }) {
+    setRenderLoading(true);
     api
       .addNewCard(name, link)
       .then((newCard) => {
@@ -132,7 +136,8 @@ function App() {
       })
       .catch((err) => {
         console.log(err);
-      });
+      })
+      .finally(() => setRenderLoading(false));
   }
 
   return (
@@ -154,11 +159,13 @@ function App() {
         isOpen={isEditAvatarPopupOpen}
         onClose={closeAllPopups}
         onUpdateAvatar={handleUpdateAvatar}
+        loading={renderLoading}
       />
       <EditProfilePopup
         isOpen={isEditProfilePopupOpen}
         onClose={closeAllPopups}
         onUpdateUser={handleUpdateUser}
+        loading={renderLoading}
       />
       <div id="popup-confirm" className="popup confirm-popup">
         <div className="popup__body">
@@ -175,7 +182,6 @@ function App() {
               Да
             </button>
           </form>
-
           <button
             type="button"
             className="button popup__close confirm-popup__close"
@@ -188,6 +194,7 @@ function App() {
         isOpen={isAddPlacePopupOpen}
         onClose={closeAllPopups}
         onAddPlace={handleAddPlaceSubmit}
+        loading={renderLoading}
       />
       <ImagePopup card={selectedCard} onClose={closeAllPopups} />
     </CurrentUserContext.Provider>
