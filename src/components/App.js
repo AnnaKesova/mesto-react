@@ -54,7 +54,7 @@ function App() {
 
     if (isLiked) {
       api
-        .deleteLike(card._id, !isLiked)
+        .deleteLike(card._id)
         .then((newCard) => {
           setCards((state) =>
             state.map((c) => (c._id === card._id ? newCard : c))
@@ -66,7 +66,7 @@ function App() {
     } else {
       // Отправляем запрос в API и получаем обновлённые данные карточки
       api
-        .changeLikeCardStatus(card._id, !isLiked)
+        .changeLikeCardStatus(card._id)
         .then((newCard) => {
           setCards((state) =>
             state.map((c) => (c._id === card._id ? newCard : c))
