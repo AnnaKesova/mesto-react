@@ -23,7 +23,7 @@
 
 ### клонировать репозиторий
 
-$ git clone https://github.com/AnnaKesova/react-mesto-auth.git
+$ git clone https://github.com/AnnaKesova/mesto-react.git
 
 ### установка зависимостей
 
